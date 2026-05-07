@@ -14,7 +14,7 @@ public class Room
     
     public int Floor { get; set; }
     
-    [Range(1, int.MaxValue, ErrorMessage = "You must select a floor")];
+    [Range(1, int.MaxValue, ErrorMessage = "You must select a floor")]
     public int Capacity { get; set; }
     
     public bool HasProjector { get; set; }
