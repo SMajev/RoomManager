@@ -73,4 +73,15 @@ public class RoomsController : ControllerBase
 
         return Ok(room);
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteRoom(int id)
+    {
+        var room = InMemoryDB.Rooms.FirstOrDefault(r  => r.Id == id);
+        if (room is null) return NotFound();
+        bool hasReservation = InMemoryDB.Reservations.Any(r => r.RoomId == id);
+        if (hasReservation) return Conflict("Cannot delete room because it has related reservations.");
+        InMemoryDB.Rooms.Remove(room);
+        return Ok();
+    }
 }
