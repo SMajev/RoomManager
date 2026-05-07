@@ -44,4 +44,33 @@ public class RoomsController : ControllerBase
             .ToList();
         return Ok(rooms);
     }
+
+    [HttpPost]
+    public ActionResult<Room> CrateRoom(Room room)
+    {
+        room.Id = InMemoryDB.Rooms.Any()
+            ? InMemoryDB.Rooms.Max(r => r.Id) + 1
+            : 1;
+        
+        InMemoryDB.Rooms.Add(room);
+        
+        return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, room);
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult<Room> PutRoom(int id, Room updatedRoom)
+    {
+        var room = InMemoryDB.Rooms.FirstOrDefault(r => r.Id == id);
+        
+        if (room is null) return NotFound();
+        
+        room.Name = updatedRoom.Name;
+        room.BuildingCode = updatedRoom.BuildingCode;
+        room.Floor = updatedRoom.Floor;
+        room.Capacity = updatedRoom.Capacity;
+        room.HasProjector = updatedRoom.HasProjector;
+        room.IsActive = updatedRoom.IsActive;
+
+        return Ok(room);
+    }
 }
