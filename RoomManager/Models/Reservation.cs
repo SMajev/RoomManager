@@ -2,7 +2,7 @@
 
 namespace RoomManager.Models;
 
-public class Reservation
+public class Reservation : IValidatableObject
 {
     public int Id { get; set; }
     

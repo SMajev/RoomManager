@@ -19,7 +19,7 @@ public class RoomsController : ControllerBase
         
         if (minCapacity.HasValue) rooms = rooms.Where(r => r.Capacity >= minCapacity.Value);
         if (hasProjector.HasValue) rooms = rooms.Where(r => r.HasProjector == hasProjector.Value);
-        if (activeOnly == true) rooms.Where(r => r.IsActive == true);
+        if (activeOnly == true) rooms = rooms.Where(r => r.IsActive);
         
         return Ok(rooms.ToList());
     }
@@ -82,6 +82,6 @@ public class RoomsController : ControllerBase
         bool hasReservation = InMemoryDB.Reservations.Any(r => r.RoomId == id);
         if (hasReservation) return Conflict("Cannot delete room because it has related reservations.");
         InMemoryDB.Rooms.Remove(room);
-        return Ok();
+        return NoContent();
     }
 }
