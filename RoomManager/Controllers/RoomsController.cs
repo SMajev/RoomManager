@@ -23,7 +23,25 @@ public class RoomsController : ControllerBase
         
         return Ok(rooms.ToList());
     }
-    
-    
-    
+
+
+    [HttpGet("{id}")]
+    public ActionResult<Room> GetRoom(int id)
+    {
+        var room = InMemoryDB.Rooms.FirstOrDefault(r => r.Id == id);
+        
+        if (room is null)
+            return NotFound();
+
+        return Ok(room);
+    }
+
+    [HttpGet("building/{buildingCode}")]
+    public ActionResult<IEnumerable<Room>> GetRoomsByBuilding(string buildingCode)
+    {
+        var rooms = InMemoryDB.Rooms
+            .Where(r => r.BuildingCode.Equals(buildingCode, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        return Ok(rooms);
+    }
 }
